@@ -6,7 +6,12 @@ defmodule InertiaTodoWeb.TaskController do
 
   def index(conn, _params) do
     tasks = Tasks.list_tasks()
-    render(conn, :index, tasks: tasks)
+
+    conn
+    |> assign_prop(:tasks, tasks)
+    |> assign_prop(:page_title, "Tasks")
+    |> assign_prop(:page_description, "List of all tasks")
+    |> render_inertia("TaskList")
   end
 
   def new(conn, _params) do
@@ -28,14 +33,19 @@ defmodule InertiaTodoWeb.TaskController do
 
   def show(conn, %{"id" => id}) do
     task = Tasks.get_task!(id)
-    render(conn, :show, task: task)
+    IO.inspect(task, label: "task")
+
+    conn
+    |> assign_prop(:task, task)
+    |> assign_prop(:page_title, "Task Details")
+    |> render_inertia("TaskDetail")
   end
 
-  def edit(conn, %{"id" => id}) do
-    task = Tasks.get_task!(id)
-    changeset = Tasks.change_task(task)
-    render(conn, :edit, task: task, changeset: changeset)
-  end
+  # def edit(conn, %{"id" => id}) do
+  #   task = Tasks.get_task!(id)
+  #   changeset = Tasks.change_task(task)
+  #   render(conn, :edit, task: task, changeset: changeset)
+  # end
 
   def update(conn, %{"id" => id, "task" => task_params}) do
     task = Tasks.get_task!(id)
@@ -44,7 +54,8 @@ defmodule InertiaTodoWeb.TaskController do
       {:ok, task} ->
         conn
         |> put_flash(:info, "Task updated successfully.")
-        |> redirect(to: ~p"/tasks/#{task}")
+        |> assign_prop(:task, task)
+        |> render_inertia("TaskDetail")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, :edit, task: task, changeset: changeset)

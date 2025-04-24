@@ -43,6 +43,7 @@ defmodule InertiaTodoWeb do
         layouts: [html: InertiaTodoWeb.Layouts]
 
       use Gettext, backend: InertiaTodoWeb.Gettext
+      import Inertia.Controller
 
       import Plug.Conn
 
@@ -75,6 +76,7 @@ defmodule InertiaTodoWeb do
       import Phoenix.Controller,
         only: [get_csrf_token: 0, view_module: 1, view_template: 1]
 
+      import Inertia.HTML
       # Include general helpers for rendering HTML
       unquote(html_helpers())
     end

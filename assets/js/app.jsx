@@ -16,7 +16,7 @@
 //
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
-import "phoenix_html"
+import "phoenix_html";
 // Establish Phoenix Socket and LiveView configuration.
 // import {Socket} from "phoenix"
 // import {LiveSocket} from "phoenix_live_view"
@@ -42,3 +42,18 @@ import "phoenix_html"
 // >> liveSocket.disableLatencySim()
 // window.liveSocket = liveSocket
 
+import { createInertiaApp } from "@inertiajs/react";
+import { createRoot } from "react-dom/client";
+import React from "react";
+import axios from "axios";
+
+axios.defaults.xsrfHeaderName = "x-csrf-token";
+
+createInertiaApp({
+  resolve: async (name) => {
+    return await import(`./pages/${name}.jsx`);
+  },
+  setup({ el, App, props }) {
+    createRoot(el).render(<App {...props} />);
+  },
+});

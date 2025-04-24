@@ -8,6 +8,7 @@ defmodule InertiaTodoWeb.Router do
     plug :put_root_layout, html: {InertiaTodoWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Inertia.Plug
   end
 
   pipeline :api do
@@ -18,7 +19,11 @@ defmodule InertiaTodoWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    resources "/tasks", TaskController
+    get "/tasks", TaskController, :index
+    post "/tasks", TaskController, :create
+    get "/tasks/:id", TaskController, :show
+    patch "/tasks/:id", TaskController, :update
+    delete "/tasks/:id", TaskController, :delete
   end
 
   # Other scopes may use custom stacks.

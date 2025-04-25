@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { router } from "@inertiajs/react";
 
-export default function TaskForm({ task, title, onClose }) {
+export default function TaskForm({ task, title, onClose, type }) {
   const [formData, setFormData] = useState({
     title: task.title || "",
     description: task.description || "",
@@ -17,19 +17,26 @@ export default function TaskForm({ task, title, onClose }) {
   };
 
   const handleSubmit = (e) => {
+    console.log("type", type);
     e.preventDefault();
-
-    router.patch(
-      `/tasks/${task.id}`,
-      {
-        task: formData,
-      },
-      {
-        onSuccess: () => {
-          onClose();
+    if (type === "edit") {
+      router.patch(
+        `/tasks/${task.id}`,
+        {
+          task: formData,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            onClose();
+          },
+        }
+      );
+    } else if (type === "new") {
+      router.post("/tasks", {
+        task: formData,
+      });
+    }
+    onClose();
   };
 
   return (

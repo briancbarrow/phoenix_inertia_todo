@@ -84,6 +84,7 @@ export default function TaskDetail({ task, flash }) {
           task={task}
           title={`Edit Task ${task.id}`}
           onClose={handleClose}
+          type="edit"
         />
       </Modal>
     </AppLayout>

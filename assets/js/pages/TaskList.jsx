@@ -7,6 +7,7 @@ import TaskForm from "../components/TaskForm.jsx";
 
 export default function TaskIndex({ tasks, flash }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [type, setType] = useState("new");
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
@@ -19,7 +20,8 @@ export default function TaskIndex({ tasks, flash }) {
     }
   };
 
-  const openModal = () => {
+  const openModal = (type) => {
+    setType(type);
     setIsModalOpen(true);
   };
   const closeModal = () => {
@@ -105,7 +107,7 @@ export default function TaskIndex({ tasks, flash }) {
                         onClick={(e) => {
                           e.preventDefault();
                           setNewTask(task);
-                          openModal();
+                          openModal("edit");
                         }}
                       >
                         Edit
@@ -131,7 +133,12 @@ export default function TaskIndex({ tasks, flash }) {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal} id="new-task-modal">
-        <TaskForm task={newTask} title={`New Task`} onClose={closeModal} />
+        <TaskForm
+          task={newTask}
+          title={`New Task`}
+          onClose={closeModal}
+          type={type}
+        />
       </Modal>
     </AppLayout>
   );
